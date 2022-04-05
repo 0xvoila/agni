@@ -4,16 +4,15 @@ import urllib
 import json
 from urllib.parse import urlparse
 from py2neo import Graph
-import boto3
+import base64
 
 class AgniSpider(scrapy.Spider):
     name = "agni"
-    graph = Graph(password="2June1989!", name="neo4j")
+    graph = Graph("bolt://54.234.37.204:7687", password="2June1989!", name="neo4j")
     start_urls = [
         'https://en.wikipedia.org/wiki/Main_Page',
     ]
 
-    client = boto3.client('firehose')
 
     def parse(self, response):
 
@@ -30,12 +29,6 @@ class AgniSpider(scrapy.Spider):
                 if x:
                     d[element.name] = x
 
-        client.put_record(
-            DeliveryStreamName='PUT-OPS-ltrsw',
-            Record={
-                'Data': json.dumps(d)
-            }
-        )
 
         for link in soup.find_all('a', href=True):
             absoluteUrl = urllib.parse.urljoin(url, link['href'])
@@ -43,14 +36,17 @@ class AgniSpider(scrapy.Spider):
             if parsedUrl.scheme.strip().lower() != 'https' and parsedUrl.scheme.strip().lower() != 'http':
                 pass
             else:
+                
+                absoluteUrl = absoluteUrl.encode('ascii')
+                absoluteUrl = base64.b64encode(absoluteUrl)
 
                 self.graph.run(
                     "MERGE (child:page{page_url:'" + url + "'}) " +
                     "On CREATE " +
-                    "SET child.page_url='" + url + "', page_rank = 1.0 " +
+                    "SET child.page_url='" + url + "', child.page_rank = 1.0 " +
                     "MERGE (parent:page{page_url:'" + absoluteUrl + "'}) " +
                     "On CREATE " +
-                    "SET parent.page_url = '" + absoluteUrl + "' , page_rank = 1.0 " +
+                    "SET parent.page_url = '" + absoluteUrl + "' , parent.page_rank = 1.0 " +
                     "MERGE (child)-[:FOLLOWS]->(parent)"
                 )
 
