@@ -8,7 +8,7 @@ import base64
 
 class AgniSpider(scrapy.Spider):
     name = "agni"
-    graph = Graph("bolt://54.234.37.204:7687", password="2June1989!", name="neo4j")
+    graph = Graph("bolt://44.202.30.181:7687", password="2June1989!", name="neo4j")
     start_urls = [
         'https://en.wikipedia.org/wiki/Main_Page',
     ]
@@ -37,8 +37,8 @@ class AgniSpider(scrapy.Spider):
                 pass
             else:
                 
-                absoluteUrl = absoluteUrl.encode('ascii')
-                absoluteUrl = base64.b64encode(absoluteUrl)
+                url = url.replace("'", r"\'")
+                absoluteUrl = absoluteUrl.replace("'", r"\'")
 
                 self.graph.run(
                     "MERGE (child:page{page_url:'" + url + "'}) " +
