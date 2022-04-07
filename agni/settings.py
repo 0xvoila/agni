@@ -89,11 +89,11 @@ AUTOTHROTTLE_TARGET_CONCURRENCY = 1.5
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-# DEPTH_PRIORITY = 1
-# SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
-# SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
-# SCHEDULER_PRIORITY_QUEUE = 'scrapy.pqueues.DownloaderAwarePriorityQueue'
-# REACTOR_THREADPOOL_MAXSIZE = 20
+DEPTH_PRIORITY = 1
+SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
+SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
+SCHEDULER_PRIORITY_QUEUE = 'scrapy.pqueues.DownloaderAwarePriorityQueue'
+REACTOR_THREADPOOL_MAXSIZE = 20
 DOWNLOAD_TIMEOUT = 15
 REDIRECT_ENABLED = False
 AJAXCRAWL_ENABLED = True
