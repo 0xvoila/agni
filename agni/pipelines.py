@@ -8,4 +8,6 @@
 
 class AgniPipeline(object):
     def process_item(self, item, spider):
+        print("from amit")
+        print(item)
         return item
